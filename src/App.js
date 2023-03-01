@@ -1,24 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
-
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import "./App.css";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const client = axios.create({
-    baseURL: "https://jsonplaceholder.typicode.com/posts"
-  })
+  baseURL: "https://jsonplaceholder.typicode.com/posts",
+});
 
 const App = () => {
-  // const [title, setTitle] = useState('');
-  // const [body, setBody] = useState('');
   const [posts, setPosts] = useState([]);
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
 
   // GET
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        let response = await client.get('?_limit=2');
-        setPosts(response.data)
+        let response = await client.get("?_limit=3");
+        setPosts(response.data);
       } catch (error) {
         console.log(error);
       }
@@ -27,74 +25,74 @@ const App = () => {
   }, []);
 
   // DELETE
-  // const deletePost = async (id) => {
-  //   try {
-  //     await client.delete(`${id}`);
-  //     setPosts(
-  //       posts.filter((post) => {
-  //         return post.id !== id;
-  //       })
-  //     );
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const deletePost = async (id) => {
+    try {
+      await client.delete(`${id}`)
+      setPosts(
+        posts.filter((post) => {
+          return post.id !== id;
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  // Handle form submission
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   addPosts(title, body);
-  // };
+  // Submit
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    addPosts(title, body);
+  };
 
   // POST
-  // const addPosts = async (title, body) => {
-  //   try {
-  //     let response = await client.post('', {
-  //       title: title,
-  //       body: body,
-  //     });
-  //     setPosts([response.data, ...posts]);
-  //     setTitle('');
-  //     setBody('');
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const addPosts = async (title, body) => {
+    try {
+      let response = await client.post('', {
+        title: title,
+        body: body,
+      });
+      setPosts([response.data, ...posts]);
+      setTitle('');
+      setBody('');
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
-    <div className='app'>
+    <div className="app">
       <nav>
         <h1>POSTS APP</h1>
       </nav>
 
-      {/* POST FORM */}
-      {/* <div className='add-post-container'>
+      {/* Submit From */}
+      <div className="add-post-container">
         <form onSubmit={handleSubmit}>
-          <input type='text' className='form-control' value={title} onChange={(e) => setTitle(e.target.value)} />
-          <textarea name='' className='form-control' id='' cols={10} rows={8} value={body} onChange={(e) => setBody(e.target.value)}></textarea>
-          <button type='submit'>Add Post</button>
+          <input type="text" className="form-control" value={title} onChange={(e) => setTitle(e.target.value)} />
+          <textarea name="" id="" className="form-control" cols={10} rows={8} value={body} onChange={(e) => setBody(e.target.value)}></textarea>
+          <button type="submit">Add Post</button>
         </form>
-      </div> */}
+      </div>
 
-      {/* POSTS LIST */}
-      <div className='posts-container'>
+      {/* Posts LIST */}
+      <div className="posts-container">
         <h2>All Posts</h2>
         {posts.map((post) => {
-					return (
-						<div className="post-card" key={post.id}>
-							<h2 className="post-title">{post.title}</h2>
-							<p className="post-body">{post.body}</p>
-							<div className="button">
-								{/* <div className="delete-btn" onClick={() => deletePost(post.id)}>
-									Delete
-								</div> */}
-							</div>
-						</div>
-					);
-				})}
+          return (
+            <div className="post-card" key={post.id}>
+              <h2 className="post-title">{post.title}</h2>
+              <p className="post-body">{post.body}</p>
+              <div className="button">
+                <div className="delete-btn" onClick={() => deletePost(post.id)}>
+                  Delete
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
